@@ -1,29 +1,30 @@
-// src/components/Cart.js
 import React from 'react';
+import { Typography, Button, Grid } from '@mui/material';
 
-const Cart = ({ bookings, onRemove, onIncrease, onDecrease }) => {
-  const totalCost = bookings.reduce((acc, booking) => acc + booking.price * booking.quantity, 0);
+function Cart({ cart, onRemove }) {
+  const total = cart.reduce((acc, item) => acc + item.price, 0);
 
   return (
-    <div className="cart">
-      <h2>Your Cart</h2>
-      {bookings.length === 0 ? (
-        <p>Your cart is empty.</p>
+    <div>
+      <Typography variant="h4" gutterBottom>Cart</Typography>
+      {cart.length === 0 ? (
+        <Typography>No properties booked.</Typography>
       ) : (
-        bookings.map((booking) => (
-          <div key={booking.id} className="cart-item">
-            <h4>{booking.title}</h4>
-            <p>${booking.price} per night</p>
-            <p>Quantity: {booking.quantity}</p>
-            <button onClick={() => onIncrease(booking.id)}>+</button>
-            <button onClick={() => onDecrease(booking.id)}>-</button>
-            <button onClick={() => onRemove(booking.id)}>Remove</button>
-          </div>
-        ))
+        <div>
+          {cart.map((item, index) => (
+            <Grid container key={index} alignItems="center" justify="space-between">
+              <Typography>{item.title}</Typography>
+              <Typography>${item.price}</Typography>
+              <Button variant="contained" color="secondary" onClick={() => onRemove(item.id)}>
+                Remove
+              </Button>
+            </Grid>
+          ))}
+          <Typography variant="h6">Total: ${total}</Typography>
+        </div>
       )}
-      <h3>Total Cost: ${totalCost}</h3>
     </div>
   );
-};
+}
 
 export default Cart;

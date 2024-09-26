@@ -1,56 +1,59 @@
-// src/components/Checkout.js
 import React, { useState } from 'react';
+import { TextField, Button, Typography } from '@mui/material';
 
-const Checkout = ({ bookings }) => {
-  const [contactInfo, setContactInfo] = useState({
+function Checkout({ total, onCheckout }) {
+  const [details, setDetails] = useState({
     name: '',
     email: '',
-    paymentDetails: '',
+    paymentInfo: '',
   });
 
-  const totalCost = bookings.reduce((acc, booking) => acc + booking.price * booking.quantity, 0);
-
   const handleChange = (e) => {
-    setContactInfo({ ...contactInfo, [e.target.name]: e.target.value });
+    setDetails({
+      ...details,
+      [e.target.name]: e.target.value,
+    });
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    alert(`Booking successful for ${contactInfo.name}! Total Cost: $${totalCost}`);
+  const handleSubmit = () => {
+    onCheckout();
   };
 
   return (
-    <div className="checkout">
-      <h2>Checkout</h2>
-      <form onSubmit={handleSubmit}>
-        <input
-          type="text"
+    <div>
+      <Typography variant="h4" gutterBottom>Checkout</Typography>
+      <form>
+        <TextField
+          label="Name"
           name="name"
-          placeholder="Name"
-          value={contactInfo.name}
+          value={details.name}
           onChange={handleChange}
-          required
+          fullWidth
+          margin="normal"
         />
-        <input
-          type="email"
+        <TextField
+          label="Email"
           name="email"
-          placeholder="Email"
-          value={contactInfo.email}
+          value={details.email}
           onChange={handleChange}
-          required
+          fullWidth
+          margin="normal"
         />
-        <input
-          type="text"
-          name="paymentDetails"
-          placeholder="Payment Details"
-          value={contactInfo.paymentDetails}
+        <TextField
+          label="Payment Information"
+          name="paymentInfo"
+          value={details.paymentInfo}
           onChange={handleChange}
-          required
+          fullWidth
+          margin="normal"
         />
-        <button type="submit">Confirm Booking</button>
+        <Typography variant="h6">Total: ${total}</Typography>
+        <Button variant="contained" color="primary" onClick={handleSubmit}>
+          Complete Checkout
+        </Button>
       </form>
     </div>
   );
-};
+}
 
 export default Checkout;
